@@ -28,6 +28,7 @@ export class Meteo {
     num_reunion: number;
 
     @OneToOne(type => Reunion, reunion => reunion.meteo)
+    @JoinColumn([{ name: "num_reunion", referencedColumnName: "num_officiel"}, { name: "date_reunion", referencedColumnName: "date_reunion"}])
     reunion: Reunion;
 
     @ManyToOne(type => Nebulosite, nebulosite => nebulosite.meteos, {cascade: true, nullable: false, onUpdate: "CASCADE"})

@@ -66,11 +66,7 @@ export class Reunion {
     @JoinColumn([{ name: "pays_code", referencedColumnName: "code" }])
     pays: Pays;
 
-    @OneToOne(type => Meteo, meteo => meteo.reunion, { eager: true, cascade: true })
-    @JoinColumn([
-      { name: "date_reunion", referencedColumnName: "date_reunion" },
-      { name: "num_officiel", referencedColumnName: "num_reunion" }
-    ])
+    @OneToOne(type => Meteo, meteo => meteo.reunion, { eager: true, cascade: true})
     meteo: Meteo;
 
     @OneToMany(type => Course, course => course.reunion, { cascade: true })

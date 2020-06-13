@@ -27,6 +27,7 @@ export class ProgrammeService {
             date = new Date(date.toDateString());
             this.programmeDB.findByDate(date)
                 .then((programme: Programme) => {
+                    console.log(JSON.stringify(programme));
                     this.saveWithPMU(date, programme).subscribe(
                         (programme: Programme) => {
                             observer.next(programme)

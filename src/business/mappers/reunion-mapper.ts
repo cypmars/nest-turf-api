@@ -63,6 +63,7 @@ export class ReunionMapper {
         meteo.nebulosite = this.pmuNebulositeToEntity(meteoPMU.nebulositeCode, meteoPMU.nebulositeLibelleCourt, meteoPMU.nebulositeLibelleLong);
         meteo.num_reunion = reunion.num_officiel;
         meteo.date_reunion = reunion.date_reunion;
+        meteo.temperature = meteoPMU.temperature;
         return meteo;
     }
 
@@ -126,6 +127,7 @@ export class ReunionMapper {
     }
 
     public static dbToEntity(reunionPMU: ReunionPMU, reunion: Reunion) {
+        console.log("reunion.id in dbToEntity : ", reunion.id)
         reunion.date_reunion = reunionPMU.dateReunion ? new Date(reunionPMU.dateReunion) : null;
         reunion.num_officiel = reunionPMU.numOfficiel;
         reunion.date_insert_db = new Date();

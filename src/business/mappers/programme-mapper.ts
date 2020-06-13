@@ -2,7 +2,6 @@ import { PmuApiBean } from "../models/programme";
 import { Programme } from "src/database/models/programme.entity";
 import { ProgrammeDTO } from "src/api/models/programme-dto";
 import { ReunionMapper } from "./reunion-mapper";
-import { PmuApiService } from "../services/pmuapi/pmuapi.service";
 
 export class ProgrammeMapper {
     public static pmuApiBeanToEntity(data: PmuApiBean): Programme {

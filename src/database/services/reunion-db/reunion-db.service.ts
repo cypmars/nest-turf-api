@@ -25,6 +25,15 @@ export class ReunionDBService {
             .getMany();
     }
 
+    findByKeys(date: Date, numOfficiel: number): Promise<Array<Reunion>> {
+        return this.reunionRepository
+            .createQueryBuilder("reunion")
+            .select("reunion")
+            .where("reunion.date = :date AND reunion.num_officiel = :numOfficiel", {date: '%' + date + '%', numofficiel: numOfficiel})
+            .orderBy("reunion", "DESC")
+            .getMany();
+    }
+
     createOrUpdateOne(reunion: Reunion): Promise<Reunion> {
         return this.reunionRepository.save(reunion);
     }

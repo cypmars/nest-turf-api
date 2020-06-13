@@ -1,9 +1,9 @@
 import { ReunionDTO } from "./reunion-dto";
 
 export class ProgrammeDTO {
-    date: Date;
-    dateInsertDB: Date;
-    dateProgrammeActif: Date;
+    date: Number;
+    dateInsertDB: Number;
+    dateProgrammeActif: Number;
     datesProgrammesDisponibles: string[];
     reunions: ReunionDTO[]
     

@@ -47,6 +47,7 @@ export class Programme {
 }
 
 export class Reunion {
+    public id: number;
     public audience: string;
     public cached: boolean;
     public cagnottes: Array<Cagnotte>;

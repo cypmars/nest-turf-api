@@ -11,7 +11,13 @@ export class ProgrammeDBService {
         return this.programmeRepository
             .createQueryBuilder("programme")
             .select("programme")
-            .where("programme.date IS :date", {date: '%' + date + '%'})
+            .where("programme.date = :date", {date: '%' + date.toDateString() + '%'})
+            .leftJoinAndSelect('programme.reunions', 'reunion')
+            .leftJoinAndSelect('reunion.courses', 'course')
+            .leftJoinAndSelect('reunion.meteo', 'meteo')
+            .leftJoinAndSelect('meteo.nebulosite', 'nebulosite')
+            .leftJoinAndSelect('reunion.pays', 'pays')
+            .leftJoinAndSelect('reunion.hippodrome', 'hippodrome')
             .orderBy("programme", "DESC")
             .getOne();
     }

@@ -1,0 +1,194 @@
+CREATE TABLE programme (
+  date TIMESTAMP WITH TIME ZONE PRIMARY KEY NOT NULL,
+  date_insert_db TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_DATE
+);
+
+CREATE TABLE hippodrome(
+  code VARCHAR(20) PRIMARY KEY,
+  libelle_court VARCHAR(100),
+  libelle_long VARCHAR(500)
+);
+
+CREATE TABLE nebulosite(
+  code VARCHAR(5) PRIMARY KEY,
+  libelle_court VARCHAR(50),
+  libelle_long VARCHAR(1000)
+);
+
+CREATE TABLE meteo(
+  id SERIAL,
+  date_prevision TIMESTAMP WITH TIME ZONE, 
+  temperature INTEGER,
+  force_vent INTEGER,
+  direction_vent VARCHAR(5),
+  nebulosite_code VARCHAR(5),
+
+  FOREIGN KEY(nebulosite_code) references nebulosite(code) ON UPDATE CASCADE,
+
+  date_reunion TIMESTAMP WITH TIME ZONE,
+  num_reunion INTEGER,
+  PRIMARY KEY(date_reunion, num_reunion)
+);
+
+CREATE TABLE pays(
+  code VARCHAR(20) PRIMARY KEY,
+  libelle VARCHAR(200)
+);
+
+CREATE TABLE reunion (
+  id SERIAL,
+  date_reunion TIMESTAMP WITH TIME ZONE NOT NULL,
+  date_insert_db TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_DATE,
+  audience VARCHAR (20),
+  nature VARCHAR(20),
+  num_externe INTEGER,
+  num_officiel INTEGER,
+  offres_internet BOOLEAN,
+  report_plus_fpa_max INTEGER,
+  statut VARCHAR(20),
+
+  programme_date TIMESTAMP WITH TIME ZONE,
+  FOREIGN KEY(programme_date) references programme(date) ON UPDATE CASCADE,
+
+  hippodrome_code VARCHAR(20),
+  FOREIGN KEY(hippodrome_code) references hippodrome(code) ON UPDATE CASCADE,
+
+  pays_code VARCHAR(20),
+  FOREIGN KEY(pays_code) references pays(code),
+
+  PRIMARY KEY(date_reunion, num_officiel)
+);
+
+CREATE TABLE discipline(
+  libelle VARCHAR(50) PRIMARY KEY DEFAULT 'NR'
+);
+
+CREATE TABLE specialite(
+  libelle VARCHAR(50) PRIMARY KEY DEFAULT 'NR'
+);
+
+CREATE TABLE corde(
+  libelle VARCHAR(50) PRIMARY KEY DEFAULT 'NR'
+);
+
+CREATE TABLE distance_unit(
+  libelle VARCHAR(50) PRIMARY KEY DEFAULT 'NR'
+);
+
+CREATE TABLE statut(
+  libelle VARCHAR(50) PRIMARY KEY DEFAULT 'NR'
+);
+
+CREATE TABLE categorie_statut(
+  libelle VARCHAR(50) PRIMARY KEY DEFAULT 'NR'
+);
+
+CREATE TABLE categorie_particularite(
+  libelle VARCHAR(100) PRIMARY KEY DEFAULT 'NR'
+);
+
+CREATE TABLE condition_sexe(
+  libelle VARCHAR(100) PRIMARY KEY DEFAULT 'NR'
+);
+
+
+CREATE TABLE condition_age(
+  libelle VARCHAR(100) PRIMARY KEY DEFAULT 'NR'
+);
+
+CREATE TABLE type_piste(
+  libelle VARCHAR(100) PRIMARY KEY DEFAULT 'NR'
+);
+
+CREATE TABLE penetrometre (
+  id SERIAL,
+  valeur_mesure VARCHAR(10),
+  heure_mesure TIMESTAMP WITH TIME ZONE,
+  intitule VARCHAR(20),
+  commentaire VARCHAR(500),
+
+  course_heure_depart TIMESTAMP WITH TIME ZONE,
+  course_libelle VARCHAR(1000),
+  PRIMARY KEY(course_heure_depart, course_libelle)
+);
+
+CREATE TABLE recompense(
+  id SERIAL,
+
+  montant_total_offert INTEGER,
+  montant_offert_1er INTEGER,
+  montant_offert_2eme INTEGER,
+  montant_offert_3eme INTEGER,
+  montant_offert_4eme INTEGER,
+  montant_offert_5eme INTEGER,
+
+  course_heure_depart TIMESTAMP WITH TIME ZONE,
+  course_libelle VARCHAR(1000),
+  PRIMARY KEY(course_heure_depart, course_libelle)
+);
+
+CREATE TABLE course(
+  id SERIAL,
+
+  heure_depart TIMESTAMP WITH TIME ZONE,
+  libelle VARCHAR(1000),
+
+  num_ordre INTEGER,
+  num_externe INTEGER,
+  libelle_court VARCHAR(50),
+  parcours VARCHAR(50),
+  distance INTEGER,
+  nombre_declares_partants INTEGER,
+  grand_prix_national_trot BOOLEAN,
+  num_societe_mere INTEGER,			
+  pari_multi_courses BOOLEAN,
+  pari_special BOOLEAN,
+  conditions VARCHAR(5000),
+  num_course_dedoublee INTEGER,              
+  pronostics_expires BOOLEAN,
+  epc_pour_tous_paris BOOLEAN,
+  course_trackee BOOLEAN,
+  formule_champ_libre_indisponible BOOLEAN,
+  has_e_paris BOOLEAN,                       
+  ordre_arrivee INTEGER[][],
+  duree_course INTEGER,                  	
+  replay_disponible BOOLEAN,  
+  date_insert_db TIMESTAMP WITH TIME ZONE,
+  rapports_definitifs_disponibles BOOLEAN,
+
+  num_reunion INTEGER,
+  date_reunion TIMESTAMP WITH TIME ZONE,
+  FOREIGN KEY(date_reunion, num_reunion) REFERENCES reunion(date_reunion, num_officiel) ON UPDATE CASCADE,
+
+  distance_unit_libelle VARCHAR(50),
+  FOREIGN KEY(distance_unit_libelle) references distance_unit(libelle),
+
+  corde_libelle VARCHAR(50),                       	
+  FOREIGN KEY(corde_libelle) references corde(libelle),
+
+  discipline_libelle VARCHAR(50),		  
+  FOREIGN KEY(discipline_libelle) references discipline(libelle),
+
+  specialite_libelle VARCHAR(50),   
+  FOREIGN KEY(specialite_libelle) references specialite(libelle),
+
+  categorie_particularite_libelle VARCHAR(100),  
+  FOREIGN KEY(categorie_particularite_libelle) references categorie_particularite(libelle), 
+ 
+  condition_sexe_libelle VARCHAR(100),           
+  FOREIGN KEY(condition_sexe_libelle) references condition_sexe(libelle),
+
+  condition_age_libelle VARCHAR(100),           
+  FOREIGN KEY(condition_age_libelle) references condition_age(libelle),
+
+  statut_libelle VARCHAR(50),   
+  FOREIGN KEY(statut_libelle) references statut(libelle),     
+
+  type_piste_libelle VARCHAR(100),   
+  FOREIGN KEY(type_piste_libelle) references type_piste(libelle),   
+                
+  categorie_statut_libelle VARCHAR(50), 
+  FOREIGN KEY(categorie_statut_libelle) references categorie_statut(libelle), 
+
+  PRIMARY KEY(heure_depart, libelle)
+);

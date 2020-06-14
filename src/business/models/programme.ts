@@ -153,6 +153,7 @@ export class Course {
     public conditionAge: string;
     public conditionSexe: string;
     public conditions: string;
+    public corde: string;
     public courseTrackee: boolean;
     public departImminent: boolean;
     public discipline: string;
@@ -200,7 +201,7 @@ export class Course {
     public dureeCourse: number;
     public photosArrivee: Array<PhotoPMU>;
     public commentaireApresCourse: CommentairePMU;
-    public ordreArrivee: Array<number>;
+    public ordreArrivee: number[][];
 
     constructor(data) {
         this.cached = data.cached;
@@ -294,9 +295,11 @@ export class Course {
         this.ordreArrivee = new Array();
         if (data.ordreArrivee) {
             for (const ordres of data.ordreArrivee) {
+                const ordreArr = new Array();
                 for (const ordre of ordres) {
-                    this.ordreArrivee.push(ordre);
+                    ordreArr.push(ordres);
                 }
+                this.ordreArrivee.push(ordreArr);
             }
         }
     }
@@ -372,34 +375,34 @@ export class Jackpot {
     }
 }
 
-export class ParticipantsPMU {
-    public participants: Array<Participant>;
-    public ecuries: Array<Ecurie>;
-    public spriteCasaques: Array<PhotoPMU>;
+// export class ParticipantsPMU {
+//     public participants: Array<Participant>;
+//     public ecuries: Array<Ecurie>;
+//     public spriteCasaques: Array<PhotoPMU>;
 
-    constructor(data) {
-        this.participants = new Array();
-        if (data.participants) {
-            for (const participant of data.participants) {
-                this.participants.push(new Participant(data.participant));
-            }
-        }
+//     constructor(data) {
+//         this.participants = new Array();
+//         if (data.participants) {
+//             for (const participant of data.participants) {
+//                 this.participants.push(new Participant(data.participant));
+//             }
+//         }
 
-        this.ecuries = new Array();
-        if (data.ecuries) {
-            for (const ecurie of data.ecuries) {
-                this.ecuries.push(new Ecurie(ecurie));
-            }
-        }
+//         this.ecuries = new Array();
+//         if (data.ecuries) {
+//             for (const ecurie of data.ecuries) {
+//                 this.ecuries.push(new Ecurie(ecurie));
+//             }
+//         }
 
-        this.spriteCasaques = new Array();
-        if (data.spriteCasaques) {
-            for (const sprite of data.spriteCasaques) {
-                this.spriteCasaques.push(new PhotoPMU(sprite));
-            }
-        }
-    }
-}
+//         this.spriteCasaques = new Array();
+//         if (data.spriteCasaques) {
+//             for (const sprite of data.spriteCasaques) {
+//                 this.spriteCasaques.push(new PhotoPMU(sprite));
+//             }
+//         }
+//     }
+// }
 
 export class Participant {
     public age: number;
@@ -450,8 +453,8 @@ export class Participant {
     constructor(data) {
         this.age = data.age;
         this.allure = data.allure;
-        this.dernierRapportDirect = data.dernierRapportDirect ? new Rapport(this.dernierRapportDirect) : null;
-        this.dernierRapportReference = data.dernierRapportReference ? new Rapport(this.dernierRapportReference) : null;
+        this.dernierRapportDirect = data.dernierRapportDirect ? new Rapport(data.dernierRapportDirect) : null;
+        this.dernierRapportReference = data.dernierRapportReference ? new Rapport(data.dernierRapportReference) : null;
         this.driver = data.driver;
         this.driverChange = data.driverChange;
         this.eleveur = data.eleveur;

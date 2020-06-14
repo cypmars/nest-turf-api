@@ -114,7 +114,6 @@ export class ReunionMapper {
 
     private static entityMeteoToDTO(meteo: Meteo) {
         const meteoDTO = new MeteoDTO();
-        console.log(meteo);
         meteoDTO.datePrevision = meteo.date_prevision.getTime();
         meteoDTO.directionVent = meteo.direction_vent;
         meteoDTO.forceVent = meteo.force_vent;
@@ -127,7 +126,6 @@ export class ReunionMapper {
     }
 
     public static dbToEntity(reunionPMU: ReunionPMU, reunion: Reunion) {
-        console.log("reunion.id in dbToEntity : ", reunion.id)
         reunion.date_reunion = reunionPMU.dateReunion ? new Date(reunionPMU.dateReunion) : null;
         reunion.num_officiel = reunionPMU.numOfficiel;
         reunion.date_insert_db = new Date();
@@ -147,7 +145,7 @@ export class ReunionMapper {
         for (let course of reunion.courses) {
             for (let coursePMU of reunionPMU.courses) {
                 if (course.libelle === coursePMU.libelle) {
-                    courses.push(CourseMapper.dbToEntity(coursePMU, course, reunion.date_reunion));
+                    courses.push(CourseMapper.pmuToEntity(coursePMU, reunion.date_reunion, course));
                 }
             }
         }

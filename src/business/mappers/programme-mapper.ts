@@ -1,18 +1,19 @@
 import { PmuApiBean } from "../models/programme";
 import { Programme } from "src/database/models/programme.entity";
+import { Programme as ProgrammePMU } from "src/business/models/programme";
 import { ProgrammeDTO } from "src/api/models/programme-dto";
 import { ReunionMapper } from "./reunion-mapper";
 
 export class ProgrammeMapper {
-    public static pmuApiBeanToEntity(data: PmuApiBean): Programme {
+    public static pmuApiBeanToEntity(programmePMU: ProgrammePMU): Programme {
         const programme = new Programme();
-        programme.date = data.programme.date ? new Date(data.programme.date) : null;
-        programme.dateProgrammeActif = data.programme.dateProgrammeActif ? new Date(data.programme.dateProgrammeActif) : null;
+        programme.date = programmePMU.date ? new Date(programmePMU.date) : null;
+        programme.dateProgrammeActif = programmePMU.dateProgrammeActif ? new Date(programmePMU.dateProgrammeActif) : null;
         programme.datesProgrammesDisponibles = [];
-        programme.datesProgrammesDisponibles.push(...data.programme.datesProgrammesDisponibles);
+        programme.datesProgrammesDisponibles.push(...programmePMU.datesProgrammesDisponibles);
         programme.date_insert_db = new Date();
         programme.reunions = [];
-        for (let reunionPMU of data.programme.reunions) {
+        for (let reunionPMU of programmePMU.reunions) {
             programme.reunions.push(ReunionMapper.pmuToEntity(reunionPMU));
         }
         return programme
@@ -31,15 +32,15 @@ export class ProgrammeMapper {
         return programme
     }
 
-    public static dbToEntity(data: PmuApiBean, programme: Programme) {
-        programme.date = data.programme.date ? new Date(data.programme.date) : null;
-        programme.dateProgrammeActif = data.programme.dateProgrammeActif ? new Date(data.programme.dateProgrammeActif) : null;
+    public static dbToEntity(programmePMU: ProgrammePMU, programme: Programme) {
+        programme.date = programmePMU.date ? new Date(programmePMU.date) : null;
+        programme.dateProgrammeActif = programmePMU.dateProgrammeActif ? new Date(programmePMU.dateProgrammeActif) : null;
         programme.datesProgrammesDisponibles = [];
-        programme.datesProgrammesDisponibles.push(...data.programme.datesProgrammesDisponibles);
+        programme.datesProgrammesDisponibles.push(...programmePMU.datesProgrammesDisponibles);
         programme.date_insert_db = new Date();
         const reunions = []
         for (let reunion of programme.reunions) {
-            for (let reunionPMU of data.programme.reunions) {
+            for (let reunionPMU of programmePMU.reunions) {
                 if (reunionPMU.numOfficiel === reunion.num_officiel) {
                     reunions.push(ReunionMapper.dbToEntity(reunionPMU, reunion));
                 }

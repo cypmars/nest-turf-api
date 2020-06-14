@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { Programme } from 'src/database/models/programme.entity';
+import { Programme as ProgrammePMU } from 'src/business/models/programme';
 import { ProgrammeDBService } from 'src/database/services/programme-db/programme-db.service';
 import { PmuApiService } from '../pmuapi/pmuapi.service';
 import { PmuApiBean } from 'src/business/models/programme';
@@ -27,7 +28,6 @@ export class ProgrammeService {
             date = new Date(date.toDateString());
             this.programmeDB.findByDate(date)
                 .then((programme: Programme) => {
-                    console.log(JSON.stringify(programme));
                     this.saveWithPMU(date, programme).subscribe(
                         (programme: Programme) => {
                             observer.next(programme)
@@ -51,10 +51,9 @@ export class ProgrammeService {
 
     public saveWithPMU(date, programme?: Programme): Observable<Programme> {
         return new Observable((observer) => {
-            this.pmuApiService.getProgrammePMU(date).subscribe(
-                (axios: AxiosResponse<PmuApiBean>) => {
-                    const programmeToSave = programme ? ProgrammeMapper.dbToEntity(axios.data, programme) : ProgrammeMapper.pmuApiBeanToEntity(axios.data);
-                    console.log(JSON.stringify(programmeToSave));
+            this.pmuApiService.getAllInfos(date).subscribe(
+                (programmePMU: ProgrammePMU) => {
+                    const programmeToSave = programme ? ProgrammeMapper.dbToEntity(programmePMU, programme) : ProgrammeMapper.pmuApiBeanToEntity(programmePMU);
                     this.programmeDB.createOrUpdateOne(programmeToSave).then(
                         (programme) => {
                             observer.next(programme);

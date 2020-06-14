@@ -13,13 +13,16 @@ export class ProgrammeDBService {
             .select("programme")
             .where("programme.date = :date", {date: '%' + date.toDateString() + '%'})
             .leftJoinAndSelect('programme.reunions', 'reunion')
-            .leftJoinAndSelect('reunion.courses', 'course')
-            .leftJoinAndSelect('reunion.meteo', 'meteo')
-            .leftJoinAndSelect('meteo.nebulosite', 'nebulosite')
-            .leftJoinAndSelect('reunion.pays', 'pays')
-            .leftJoinAndSelect('reunion.hippodrome', 'hippodrome')
+                .leftJoinAndSelect('reunion.courses', 'course')
+                    .leftJoinAndSelect('course.penetrometre', 'penetrometre')
+                    .leftJoinAndSelect('course.recompense', 'recompense')
+                .leftJoinAndSelect('reunion.meteo', 'meteo')
+                    .leftJoinAndSelect('meteo.nebulosite', 'nebulosite')
+                .leftJoinAndSelect('reunion.pays', 'pays')
+                .leftJoinAndSelect('reunion.hippodrome', 'hippodrome')
             .orderBy("programme", "DESC")
             .getOne();
+            // Manque les foreign key en base entre course et penetrometre / recompense
     }
 
     createOrUpdateOne(programme: Programme): Promise<Programme> {
